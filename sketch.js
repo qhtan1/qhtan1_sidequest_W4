@@ -23,7 +23,6 @@ GRID LEGEND:
 const levels = [
   {
     name: "Level 1",
-    spawn: randomSpawn(grid),
     grid: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
@@ -41,7 +40,6 @@ const levels = [
 
   {
     name: "Level 2",
-    spawn: randomSpawn(grid),
     grid: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
@@ -178,8 +176,9 @@ function keyPressed() {
   if (keyCode === UP_ARROW) tryMove(-1, 0);
   if (keyCode === DOWN_ARROW) tryMove(1, 0);
 }
-function randomSpawn(grid) {
+function randomSpawn() {
   let r, c;
+
   do {
     r = floor(random(rows));
     c = floor(random(cols));
