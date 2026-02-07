@@ -14,10 +14,12 @@ PURPOSE: This is the simplest possible p5.js sketch that demonstrates:
 const TS = 32; // TILE SIZE: pixels per grid cell (32x32 squares)
 
 /*
-GRID LEGEND (how numbers map to visuals):
-- 0 = floor (walkable, light gray)
-- 1 = wall (blocked, dark teal)
+GRID LEGEND:
+- 0 = floor (walkable)
+- 1 = wall (blocked)
+- 2 = word / collectible
 */
+
 const levels = [
   {
     name: "Level 1",
@@ -28,7 +30,7 @@ const levels = [
       [1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1],
       [1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
       [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+      [1, 0, 0, 2, 0, 1, 0, 0, 0, 2, 0, 1, 0, 0, 0, 1],
       [1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
       [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
       [1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1],
@@ -57,6 +59,7 @@ const levels = [
 ];
 let currentLevel = 0;
 let player = { r: 1, c: 1 };
+let words = [];
 let grid = [];
 let rows = 0;
 let cols = 0;
@@ -70,6 +73,20 @@ function loadLevel(index) {
   resizeCanvas(cols * TS, rows * TS);
   player.r = levels[currentLevel].spawn.r;
   player.c = levels[currentLevel].spawn.c;
+  // build words list from grid
+  words = [];
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (grid[r][c] === 2) {
+        words.push({
+          r: r,
+          c: c,
+          text: "WORD",
+        });
+      }
+    }
+  }
 }
 /*
 p5.js SETUP: Runs once when sketch loads
@@ -123,6 +140,13 @@ function draw() {
     10,
     6,
   );
+  // --- draw words ---
+  fill(120, 80, 200);
+  textAlign(CENTER, CENTER);
+
+  for (let w of words) {
+    text(w.text, w.c * TS + TS / 2, w.r * TS + TS / 2);
+  }
 }
 
 function keyPressed() {
