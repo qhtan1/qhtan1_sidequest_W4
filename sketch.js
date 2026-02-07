@@ -23,7 +23,7 @@ GRID LEGEND:
 const levels = [
   {
     name: "Level 1",
-    spawn: { r: 1, c: 1 },
+    spawn: randomSpawn(grid),
     grid: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
@@ -41,7 +41,7 @@ const levels = [
 
   {
     name: "Level 2",
-    spawn: { r: 9, c: 14 },
+    spawn: randomSpawn(grid),
     grid: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
@@ -73,8 +73,12 @@ function loadLevel(index) {
   cols = grid[0].length;
 
   resizeCanvas(cols * TS, rows * TS);
-  player.r = levels[currentLevel].spawn.r;
-  player.c = levels[currentLevel].spawn.c;
+
+  // random player spawn
+  const spawn = randomSpawn();
+  player.r = spawn.r;
+  player.c = spawn.c;
+
   // build words list from grid
   words = [];
   collected = 0;
@@ -173,4 +177,13 @@ function keyPressed() {
   if (keyCode === RIGHT_ARROW) tryMove(0, 1);
   if (keyCode === UP_ARROW) tryMove(-1, 0);
   if (keyCode === DOWN_ARROW) tryMove(1, 0);
+}
+function randomSpawn(grid) {
+  let r, c;
+  do {
+    r = floor(random(rows));
+    c = floor(random(cols));
+  } while (grid[r][c] !== 0);
+
+  return { r, c };
 }
