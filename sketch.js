@@ -63,6 +63,8 @@ let words = [];
 let grid = [];
 let rows = 0;
 let cols = 0;
+let collected = 0;
+let totalWords = 0;
 
 function loadLevel(index) {
   currentLevel = index;
@@ -75,6 +77,8 @@ function loadLevel(index) {
   player.c = levels[currentLevel].spawn.c;
   // build words list from grid
   words = [];
+  collected = 0;
+  totalWords = 0;
 
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
@@ -84,6 +88,7 @@ function loadLevel(index) {
           c: c,
           text: "WORD",
         });
+        totalWords++;
       }
     }
   }
@@ -105,7 +110,17 @@ function tryMove(dr, dc) {
 
   if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) return;
 
+  // wall blocked
   if (grid[nr][nc] === 1) return;
+
+  // if stepping on a word, collect it
+  if (grid[nr][nc] === 2) {
+    grid[nr][nc] = 0; // remove from map
+    collected++;
+
+    // remove from words array so it stops drawing
+    words = words.filter((w) => !(w.r === nr && w.c === nc));
+  }
 
   player.r = nr;
   player.c = nc;
@@ -136,10 +151,11 @@ function draw() {
   fill(0);
   textAlign(LEFT, TOP);
   text(
-    `${levels[currentLevel].name} — player: (${player.r}, ${player.c})`,
+    `${levels[currentLevel].name} — player: (${player.r}, ${player.c}) — words: ${collected}/${totalWords}`,
     10,
     6,
   );
+
   // --- draw words ---
   fill(120, 80, 200);
   textAlign(CENTER, CENTER);
