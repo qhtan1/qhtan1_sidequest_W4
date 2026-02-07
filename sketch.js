@@ -21,6 +21,7 @@ GRID LEGEND (how numbers map to visuals):
 const levels = [
   {
     name: "Level 1",
+    spawn: { r: 1, c: 1 },
     grid: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
@@ -38,6 +39,7 @@ const levels = [
 
   {
     name: "Level 2",
+    spawn: { r: 1, c: 1 },
     grid: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
@@ -54,6 +56,7 @@ const levels = [
   },
 ];
 let currentLevel = 0;
+let player = { r: 1, c: 1 };
 let grid = [];
 let rows = 0;
 let cols = 0;
@@ -65,6 +68,8 @@ function loadLevel(index) {
   cols = grid[0].length;
 
   resizeCanvas(cols * TS, rows * TS);
+  player.r = levels[currentLevel].spawn.r;
+  player.c = levels[currentLevel].spawn.c;
 }
 /*
 p5.js SETUP: Runs once when sketch loads
@@ -77,42 +82,51 @@ function setup() {
 
   loadLevel(0);
 }
+function tryMove(dr, dc) {
+  const nr = player.r + dr;
+  const nc = player.c + dc;
+
+  if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) return;
+
+  if (grid[nr][nc] === 1) return;
+
+  player.r = nr;
+  player.c = nc;
+}
 
 /*
 p5.js DRAW: Runs 60 times per second (game loop)
 */
 function draw() {
-  // Clear screen with light gray background each frame
   background(240);
 
-  /*
-  CORE RENDERING LOOP: Draw every tile in the grid
-  
-  Nested loops:
-  - Outer loop: iterate ROWS (r = 0 to 10)
-  - Inner loop: iterate COLUMNS in each row (c = 0 to 15)
-  */
+  // HUD bar FIRST
+  noStroke();
+  fill(220);
+  rect(0, 0, width, 26);
+  fill(0);
+  textAlign(LEFT, TOP);
+  text(`${levels[currentLevel].name} — grid render`, 10, 6);
+
+  // grid
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      if (grid[r][c] === 1) fill(30, 50, 60);
-      else fill(230);
-
+      fill(grid[r][c] === 1 ? color(30, 50, 60) : 230);
       rect(c * TS, r * TS, TS, TS);
     }
   }
 
-  // UI LABEL: Explain what students are seeing
-  // HUD bar
-  noStroke();
-  fill(220);
-  rect(0, 0, width, 26);
-
-  fill(0);
-  textAlign(LEFT, TOP);
-  text(`${levels[currentLevel].name} — grid render`, 10, 6);
+  // player
+  fill(255, 180, 0);
+  rect(player.c * TS + 6, player.r * TS + 6, TS - 12, TS - 12);
 }
 
 function keyPressed() {
   if (key === "1") loadLevel(0);
   if (key === "2") loadLevel(1);
+
+  if (keyCode === LEFT_ARROW) tryMove(0, -1);
+  if (keyCode === RIGHT_ARROW) tryMove(0, 1);
+  if (keyCode === UP_ARROW) tryMove(-1, 0);
+  if (keyCode === DOWN_ARROW) tryMove(1, 0);
 }
