@@ -101,13 +101,17 @@ function draw() {
     }
   }
 
-  fill(0);
-  text(`${levels[currentLevel].name} — Static array → grid render`, 10, 16);
-
   // UI LABEL: Explain what students are seeing
-  fill(0); // Black text
-  text("Static array → grid render", 10, 16);
+  // HUD bar
+  noStroke();
+  fill(220);
+  rect(0, 0, width, 26);
+
+  fill(0);
+  textAlign(LEFT, TOP);
+  text(`${levels[currentLevel].name} — grid render`, 10, 6);
 }
+
 function keyPressed() {
   if (key === "1") loadLevel(0);
   if (key === "2") loadLevel(1);
