@@ -39,7 +39,7 @@ const levels = [
 
   {
     name: "Level 2",
-    spawn: { r: 1, c: 1 },
+    spawn: { r: 9, c: 14 },
     grid: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
@@ -100,14 +100,6 @@ p5.js DRAW: Runs 60 times per second (game loop)
 function draw() {
   background(240);
 
-  // HUD bar FIRST
-  noStroke();
-  fill(220);
-  rect(0, 0, width, 26);
-  fill(0);
-  textAlign(LEFT, TOP);
-  text(`${levels[currentLevel].name} — grid render`, 10, 6);
-
   // grid
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
@@ -119,6 +111,18 @@ function draw() {
   // player
   fill(255, 180, 0);
   rect(player.c * TS + 6, player.r * TS + 6, TS - 12, TS - 12);
+  // --- HUD (draw LAST so it stays on top) ---
+  noStroke();
+  fill(220);
+  rect(0, 0, width, 26);
+
+  fill(0);
+  textAlign(LEFT, TOP);
+  text(
+    `${levels[currentLevel].name} — player: (${player.r}, ${player.c})`,
+    10,
+    6,
+  );
 }
 
 function keyPressed() {
