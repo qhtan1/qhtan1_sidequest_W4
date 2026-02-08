@@ -124,9 +124,18 @@ function tryMove(dr, dc) {
     // remove from words array so it stops drawing
     words = words.filter((w) => !(w.r === nr && w.c === nc));
   }
-
   player.r = nr;
   player.c = nc;
+  // if stepping on exit AND all words collected → next level
+  if (grid[nr][nc] === 3 && collected === totalWords) {
+    if (currentLevel < levels.length - 1) {
+      loadLevel(currentLevel + 1);
+    } else {
+      // optional: game finished
+      console.log("All levels complete!");
+    }
+    return;
+  }
 }
 
 /*
