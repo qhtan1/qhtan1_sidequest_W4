@@ -26,6 +26,18 @@ Learning Goals:
 
 ---
 
+## Interactive Instructions
+
+Use the arrow keys to move the player
+
+Collect all word tiles to unlock the exit
+
+Step on the EXIT tile to advance to the next level
+
+Press 1 or 2 to manually switch between levels (for testing)
+
+---
+
 ## Assets
 
 N/A
@@ -34,6 +46,6 @@ N/A
 
 ## GenAI
 
-The code was written by Dr. Karen Cochrane and David Han but they used GenAI to write the comments.
+GenAI (ChatGPT) was used for step-by-step guidance, debugging support, and commenting assistance during development. All code structure, logic decisions, and final implementations were reviewed, tested, and adjusted by the author.
 
 ---
