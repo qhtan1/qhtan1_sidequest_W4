@@ -18,6 +18,7 @@ GRID LEGEND:
 - 0 = floor (walkable)
 - 1 = wall (blocked)
 - 2 = word / collectible
+- 3 = exit (finish tile)
 */
 
 const levels = [
@@ -33,7 +34,7 @@ const levels = [
       [1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
       [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
       [1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1],
-      [1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 3, 1],
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     ],
   },
@@ -42,7 +43,7 @@ const levels = [
     name: "Level 2",
     grid: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-      [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 3, 0, 1],
       [1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1],
       [1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1],
       [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
@@ -137,8 +138,17 @@ function draw() {
   // grid
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      fill(grid[r][c] === 1 ? color(30, 50, 60) : 230);
+      if (grid[r][c] === 1)
+        fill(30, 50, 60); // wall
+      else if (grid[r][c] === 3)
+        fill(80, 200, 120); // exit
+      else fill(230); // floor (and words are drawn separately)
       rect(c * TS, r * TS, TS, TS);
+      if (grid[r][c] === 3) {
+        fill(0);
+        textAlign(CENTER, CENTER);
+        text("EXIT", c * TS + TS / 2, r * TS + TS / 2);
+      }
     }
   }
 
