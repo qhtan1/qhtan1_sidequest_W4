@@ -6,7 +6,7 @@ GBDA302 Week 4 Example 1: Grid + Static Maze
 
 ## Authors
 
-Karen Cochrane and David Han
+Kiki Tan
 
 ---
 
